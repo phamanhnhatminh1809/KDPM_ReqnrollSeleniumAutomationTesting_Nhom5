@@ -58,7 +58,7 @@ namespace KDPM_ReqnrollSeleniumAutomationTesting_Nhom5.StepDefinitions
             IWebElement emailBox = wait.Until(d => d.FindElement(By.Id("Email")));
             IWebElement matKhauBox = wait.Until(d => d.FindElement(By.Id("MatKhau")));
             IWebElement xacNhanMatKhauBox = wait.Until(d => d.FindElement(By.Id("XacNhanMatKhau")));
-
+            // Logic xử lý sinh dữ liệu động cho các Test Case kiểm tra giới hạn biên
             if (tenDangNhap.Contains("[1000_ky_tu]"))
             {
                 for (int i = 0; i < 1001; i++)
@@ -117,13 +117,14 @@ namespace KDPM_ReqnrollSeleniumAutomationTesting_Nhom5.StepDefinitions
         [Then(@"hệ thống thông báo lỗi ""(.*)""")]
         public void ThenHệThốngThongBaoLỗi(string errorMessage)
         {
-            // Kiểm tra xem có bị chuyển hướng sang trang Đăng nhập hay không
+           
             var dangNhapElements = driver.FindElements(By.CssSelector("h2.lauth-title"));
             bool daChuyenSangDangNhap = dangNhapElements.Count > 0;
 
             var tieuDeLoiCuaIIS = driver.FindElements(By.XPath("//h1[contains(text(), 'Server Error in')]"));
             bool isLoiCoHienThiChiTiet = tieuDeLoiCuaIIS.Count > 0;
 
+            // Kiểm tra bảo mật có hiển thị lỗi quá chi tiết
             if (!isLoiCoHienThiChiTiet)
             {
                 string pageSource = driver.PageSource;
@@ -133,14 +134,18 @@ namespace KDPM_ReqnrollSeleniumAutomationTesting_Nhom5.StepDefinitions
                 }
             }
 
+            // Kiểm tra bảo mật đầu vào có chứa thẻ html
             if (errorMessage == "[bao_mat_dau_vao_html]")
             {
                 Assert.That(daChuyenSangDangNhap, Is.False, "Lỗ hổng bảo mật: Hệ thống đã chấp nhận dữ liệu mã độc và cho phép chuyển sang trang Đăng nhập!");
             }
-            else if(errorMessage == "[bao_mat_dau_vao_sql]")
+
+            // Kiểm tra bảo mật đầu vào có chứa thẻ sql
+            else if (errorMessage == "[bao_mat_dau_vao_sql]")
             {
                 Assert.That(daChuyenSangDangNhap, Is.True, "Lỗ hổng bảo mật: Hệ thống có thể chấp mã sql, cần kiểm tra xem có hiển thị thông tin lỗi sql ở phần thông tin người dùng!");
-
+            
+            // Kiểm tra ô nhập có giới hạn số ký tự
             }else if (errorMessage == "[gioi_han_ky_tu]")
             {
                 IWebElement tenDangNhapBox = wait.Until(d => d.FindElement(By.Id("TenDangNhap")));
@@ -173,7 +178,7 @@ namespace KDPM_ReqnrollSeleniumAutomationTesting_Nhom5.StepDefinitions
             }
             else
             {
-                // Nếu hệ thống lỡ cho qua trang Đăng nhập khi đang test lỗi thông thường -> Fail ngay
+                // Nếu hệ thống lỡ cho qua trang Đăng nhập khi đang test lỗi thông thường -> Fail
                 if (daChuyenSangDangNhap)
                 {
                     Assert.Fail($"Test thất bại: Hệ thống không báo lỗi '{errorMessage}' mà lại chuyển thẳng sang trang Đăng nhập.");
@@ -198,6 +203,7 @@ namespace KDPM_ReqnrollSeleniumAutomationTesting_Nhom5.StepDefinitions
                 Assert.That(isHienThiLoi, Is.True, $"Tên lỗi '{errorMessage}' không được hiển thị trên giao diện.");
 
             }
+        
         }
         [Scope(Tag = "bao_mat_ui_chong_spam")]
         [When("người dùng nhấn vào nút Đăng ký trong điều kiện hệ thống đang chậm")]
