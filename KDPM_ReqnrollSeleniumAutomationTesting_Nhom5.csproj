@@ -16,15 +16,32 @@
     <PackageReference Include="nunit" Version="4.4.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="5.1.0" />
     <PackageReference Include="Respawn" Version="7.0.0" />
+    <PackageReference Include="Selenium.Support" Version="4.44.0" />
     <PackageReference Include="Selenium.WebDriver" Version="4.44.0" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="148.0.7778.16700" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Drivers\" />
-    <Folder Include="Features\" />
-    <Folder Include="StepDefinitions\" />
     <Folder Include="Support\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Features\dathang.feature.cs">
+      <DependentUpon>DatHang.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\lichsudonhang.feature.cs">
+      <DependentUpon>LichSuDonHang.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\locthuoc.feature.cs">
+      <DependentUpon>LocThuoc.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Timkiemthuoc.feature.cs">
+      <DependentUpon>TimKiemThuoc.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Tracuuthuoc.feature.cs">
+      <DependentUpon>TraCuuThuoc.feature</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>
